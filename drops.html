@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+
+The goal here is to make a throbber, like used in browsers
+to indicate that something is going on, even if nothing is 
+apparently happening.
+
+-->
+
+<head>
+  <style>
+    body {
+      background-color: white;
+      text-align: center;
+    }
+
+    canvas {
+      border: 1px solid gray;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body> <canvas id="demo"></canvas>
+  <script>
+    var demo = {};
+    demo.values = {};
+    demo.values.interval = 1000 / 24 ;
+    demo.values.window_height = 1000;
+    demo.values.window_width = 1000;
+    demo.values.clock_height = 1000;
+    demo.values.clock_width = 1000;
+    demo.values.demo = document.getElementById('demo');
+    demo.values.ctx = demo.values.demo.getContext('2d');
+
+    demo.functions = {}
+
+    /* whiteout() clears the canvas so more painting can go on */
+    demo.functions.whiteout = function () {
+      var ctx = demo.values.ctx;
+      let canvas = document.getElementById("demo");
+      // canvas.height = window.innerHeight * 0.95;
+      // canvas.width = window.innerWidth * 0.95;
+
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, canvas.height);
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.lineTo(canvas.width, 0);
+      ctx.lineTo(0, 0);
+      ctx.strokeStyle = "rgb(255,255,255)";
+      ctx.stroke();
+      ctx.fillStyle = "rgb(255,255,255)";
+      ctx.fill();
+    }
+
+    demo.functions.drip = function ( d ) {
+      console.log(d);
+      var ctx = demo.values.ctx;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2, true);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgb(0,0,0)";
+      // ctx.strokeStyle = d.stroke;
+      ctx.stroke();
+      ctx.fillStyle = d.fill;
+      ctx.fill();
+    }
+
+    demo.functions.make_drip = function () {
+      let canvas = document.getElementById("demo");
+      let x = Math.random() * canvas.width;
+      let y = Math.random() * canvas.height;
+      let z = 10 + Math.random() * 90;
+      let r = 15 + Math.floor( Math.random() * 220 );
+      let g = 15 + Math.floor( Math.random() * 220 );
+      let b = 15 + Math.floor( Math.random() * 220 );
+      g = r ;
+      b = r;
+      let a = 0.79;
+      let rgb = [r,g,b].join(",");
+      let rgba = [r,g,b,a].join(",");
+      let color = ["rgb(",rgb,")"].join("");
+      // let color = ["rgba(",rgba,")"].join("");
+      return({ x:x,y:y,r:z,fill:color });
+    }
+
+    var max = 1000;
+    var drops = [] ;
+
+    setInterval(function () {
+      demo.functions.whiteout();
+      let drip = demo.functions.make_drip();
+      drops.push(drip);
+      while ( drops.length > max ) { drops.shift() }
+      for (let i in drops ) {
+        let drop = drops[i];
+        demo.functions.drip(drop);
+      }
+    }, demo.values.interval);
+
+    
+    fill_window();
+    window.onresize = fill_window;
+    function fill_window() {
+      let demo = document.getElementById("demo");
+      demo.height = window.innerHeight * 0.95;
+      demo.width = window.innerWidth * 0.95;
+    }
+  </script>
+</body>
+
+</html>
