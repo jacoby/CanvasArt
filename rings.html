@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html>
 
+<!--
+
+  This is another clock design, based upon 
+
+-->
+
 <head>
   <style>
+    body {
+      background-color: white;
+      text-align: center;
+    }
+
     canvas {
-      /* border: 1px solid gray; */
       margin: auto;
     }
   </style>
 </head>
 
-<body>
-  <canvas id="demo" width="500" height="500"></canvas>
-
+<body> <canvas id="demo" width="1000" height="1000"></canvas>
   <script>
     var demo = {};
-
     demo.values = {};
     demo.values.interval = 1000 / 48;
     demo.values.count = 0;
-
-    demo.values.window_height = 500;
-    demo.values.window_width = 500;
-    demo.values.clock_height = 490;
-    demo.values.clock_width = 490;
-    demo.values.face_size = 240;
+    demo.values.window_height = 1000;
+    demo.values.window_width = 1000;
+    demo.values.clock_height = 990;
+    demo.values.clock_width = 990;
+    demo.values.offset = Math.PI / 2;
     demo.values.demo = document.getElementById('demo');
     demo.values.ctx = demo.values.demo.getContext('2d');
 
     demo.functions = {}
-
     demo.functions.rings = function () {
       var today = new Date;
       var tDay = today.getDay();
@@ -37,12 +42,10 @@
       var tMin = today.getMinutes();
       var tSec = today.getSeconds();
       var tMSec = today.getMilliseconds();
-
       var dSec = tSec + tMSec / 1000;
       var dMin = tMin + dSec / 60;
       var dHour = tHour + dMin / 60;
       var dDay = tDay + dHour / 24;
-
       demo.functions.whiteout();
       demo.functions.seconds_ring(dSec);
       demo.functions.minutes_ring(dMin);
@@ -50,14 +53,8 @@
       demo.functions.days_ring(dDay);
     }
 
-    demo.functions.offset = function () {
-      var offset = Math.PI / 2;
-      return offset;
-    }
-
     demo.functions.seconds_ring = function (tSec) {
       var ctx = demo.values.ctx;
-      var fs = demo.values.face_size;
       var wx = demo.values.window_height;
       var wy = demo.values.window_width;
       var cx = demo.values.clock_height;
@@ -65,23 +62,19 @@
       var mx = cx / 2;
       var my = cy / 2;
       var pSec = tSec / 60;
-      var sec_circ = mx * 0.9;
-      var line_width = mx * 0.09;
-
-      var offset = demo.functions.offset();
+      var sec_circ = mx * 0.8;
+      var line_width = mx * 0.19;
+      var offset = demo.values.offset;
       var start = Math.PI * 2 * pSec - offset;
       var end = Math.PI * 2 - offset;
-
-      ctx.beginPath()
+      ctx.beginPath();
       ctx.arc(mx, my, sec_circ, start, end, true);
       ctx.strokeStyle = "rgb(0,50,50)";
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
-
     demo.functions.minutes_ring = function (tMin) {
       var ctx = demo.values.ctx;
-      var fs = demo.values.face_size;
       var wx = demo.values.window_height;
       var wy = demo.values.window_width;
       var cx = demo.values.clock_height;
@@ -89,23 +82,19 @@
       var mx = cx / 2;
       var my = cy / 2;
       var pMin = tMin / 60;
-      var min_circ = mx * 0.8;
-      var line_width = mx * 0.09;
-
-      var offset = demo.functions.offset();
+      var min_circ = mx * 0.6;
+      var line_width = mx * 0.19;
+      var offset = demo.values.offset;
       var start = Math.PI * 2 * pMin - offset;
       var end = Math.PI * 2 - offset;
-
-      ctx.beginPath()
+      ctx.beginPath();
       ctx.arc(mx, my, min_circ, start, end, true);
       ctx.strokeStyle = "rgb(0,100,100)";
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
-
     demo.functions.hours_ring = function (tHour) {
       var ctx = demo.values.ctx;
-      var fs = demo.values.face_size;
       var wx = demo.values.window_height;
       var wy = demo.values.window_width;
       var cx = demo.values.clock_height;
@@ -113,22 +102,19 @@
       var mx = cx / 2;
       var my = cy / 2;
       var pHour = tHour / 24;
-      var hour_circ = mx * 0.7;
-      var line_width = mx * 0.09;
-      var offset = demo.functions.offset();
+      var hour_circ = mx * 0.4;
+      var line_width = mx * 0.19;
+      var offset = demo.values.offset;
       var start = Math.PI * 2 * pHour - offset;
       var end = Math.PI * 2 - offset;
-
-      ctx.beginPath()
+      ctx.beginPath();
       ctx.arc(mx, my, hour_circ, start, end, true);
       ctx.strokeStyle = "rgb(0,150,150)";
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
-
     demo.functions.days_ring = function (tDay) {
       var ctx = demo.values.ctx;
-      var fs = demo.values.face_size;
       var wx = demo.values.window_height;
       var wy = demo.values.window_width;
       var cx = demo.values.clock_height;
@@ -136,25 +122,22 @@
       var mx = cx / 2;
       var my = cy / 2;
       var pDay = tDay / 7;
-      var day_circ = mx * 0.6;
-      var line_width = mx * 0.09;
-      var offset = demo.functions.offset();
+      var day_circ = mx * 0.2;
+      var line_width = mx * 0.19;
+      var offset = demo.values.offset;
       var start = Math.PI * 2 * pDay - offset;
       var end = Math.PI * 2 - offset;
-
-      ctx.beginPath()
+      ctx.beginPath();
       ctx.arc(mx, my, day_circ, start, end, true);
       ctx.strokeStyle = "rgb(0,200,200)";
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
-
-
     demo.functions.whiteout = function () {
       var ctx = demo.values.ctx;
       var winx = demo.values.window_height;
       var winy = demo.values.window_width;
-      ctx.beginPath()
+      ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(0, winy);
       ctx.lineTo(winx, winy);
@@ -164,19 +147,23 @@
       ctx.stroke();
       ctx.fillStyle = "rgb(255,255,255)";
       ctx.fill();
+
+    } /* the part that keeps it going */
+    setInterval(function () {
+      demo.functions.rings();
+    }, demo.values.interval);
+    make_square();
+    window.onresize = make_square;
+
+    function make_square() {
+      let height = window.innerHeight;
+      let width = window.innerWidth;
+      let min_hw = Math.min(width, height) * 0.9;
+      let square = document.getElementById("demo");
+      square.style.height = min_hw + "px";
+      square.style.width = min_hw + "px";
     }
-
-    /* the part that keeps it going */
-    // setTimeout(function () {
-    setInterval(
-      function () {
-        demo.functions.rings();
-        // demo.functions.draw()
-      },
-      demo.values.interval);
-    // }, 1000);
   </script>
-
 </body>
 
 </html>

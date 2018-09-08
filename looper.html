@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+
+The goal here is to make a throbber, like used in browsers
+to indicate that something is going on, even if nothing is 
+apparently happening.
+
+-->
+
+<head>
+  <style>
+    body {
+      background-color: white;
+      text-align: center;
+    }
+
+    canvas {
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body> <canvas id="demo" width="1000" height="1000"></canvas>
+  <script>
+    var demo = {};
+    demo.values = {};
+    demo.values.interval = 1000 / 96;
+    demo.values.window_height = 1000;
+    demo.values.window_width = 1000;
+    demo.values.clock_height = 1000;
+    demo.values.clock_width = 1000;
+    demo.values.demo = document.getElementById('demo');
+    demo.values.ctx = demo.values.demo.getContext('2d');
+
+    demo.functions = {}
+
+    /* whiteout() clears the canvas so more painting can go on */
+    demo.functions.whiteout = function () {
+      var ctx = demo.values.ctx;
+      var winx = demo.values.window_height;
+      var winy = demo.values.window_width;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, winy);
+      ctx.lineTo(winx, winy);
+      ctx.lineTo(winx, 0);
+      ctx.lineTo(0, 0);
+      ctx.strokeStyle = "rgb(255,255,255)";
+      ctx.stroke();
+      ctx.fillStyle = "rgb(255,255,255)";
+      ctx.fill();
+    }
+
+    /* looper draws the arc, setting the line width and
+      the like based on the window size 
+     */ 
+    demo.functions.looper = function (i, j) {
+      var ctx = demo.values.ctx;
+      var cx = demo.values.clock_height;
+      var cy = demo.values.clock_width;
+      var mx = cx / 2;
+      var my = cy / 2;
+      var sec_circ = mx * 0.5;
+      var line_width = mx * 0.2;
+      var offset = demo.values.offset;
+      var start = i;
+      var end = j;
+
+      ctx.beginPath();
+      ctx.arc(mx, my, sec_circ, start, end, true);
+      ctx.strokeStyle = "rgb(255,00,00)";
+      ctx.lineWidth = line_width;
+      ctx.stroke();
+    }
+
+    var order = 1;
+    var i = 0.5;
+    var j = 0;
+    var pi = Math.PI;
+    var tau = Math.PI * 2;
+    var max = Math.PI * 4;
+
+    setInterval(function () {
+      if ( i > max && j > max ) {
+        i = i % max ;
+        j = j % max ;
+      }
+
+      if (order === 1) {
+        i += 0.06;
+        j += 0.01;
+      } else {
+        i += 0.01;
+        j += 0.06;
+      }
+      if (i - j >= tau - 0.1) {
+        order = 0
+      }
+      if (Math.abs(j - i) < 0.1) {
+        order = 1
+      }
+
+      demo.functions.whiteout();
+      demo.functions.looper(i, j);
+    }, demo.values.interval);
+
+    // make_square() is intended to make sure that the 
+    // canvas, at all times, as big as can fit within 
+    // the window
+    make_square();
+    window.onresize = make_square;
+    function make_square() {
+      let height = window.innerHeight;
+      let width = window.innerWidth;
+      let min_hw = Math.min(width, height) * 0.9;
+      let square = document.getElementById("demo");
+      square.style.height = min_hw + "px";
+      square.style.width = min_hw + "px";
+    }
+  </script>
+</body>
+
+</html>
