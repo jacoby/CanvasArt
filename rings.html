@@ -20,16 +20,36 @@
   </style>
 </head>
 
-<body> <canvas id="demo" width="1000" height="1000"></canvas>
+<body> <canvas id="demo" width="500" height="500"></canvas>
   <script>
     var demo = {};
     demo.values = {};
     demo.values.interval = 1000 / 48;
     demo.values.count = 0;
-    demo.values.window_height = 1000;
-    demo.values.window_width = 1000;
-    demo.values.clock_height = 990;
-    demo.values.clock_width = 990;
+    demo.values.window_height = 500;
+    demo.values.window_width = 500;
+    demo.values.clock_height = 500;
+    demo.values.clock_width = 500;
+
+    demo.values.mx = demo.values.clock_height / 2;
+    demo.values.my = demo.values.clock_width / 2;
+    demo.values.line_width = demo.values.mx * 0.20;
+
+    demo.values.second_circ = demo.values.mx * 0.86;
+    demo.values.minute_circ = demo.values.mx * 0.64;
+    demo.values.hour_circ = demo.values.mx * 0.42;
+    demo.values.day_circ = demo.values.mx * 0.20;
+
+    demo.values.second_circ = demo.values.mx * 0.20;
+    demo.values.minute_circ = demo.values.mx * 0.42;
+    demo.values.hour_circ = demo.values.mx * 0.64;
+    demo.values.day_circ = demo.values.mx * 0.86;
+
+    demo.values.second_stroke = "rgb(50,200,50)";
+    demo.values.minute_stroke = "rgb(50,150,50)";
+    demo.values.hour_stroke = "rgb(50,100,50)";
+    demo.values.day_stroke = "rgb(50,50,50)";
+
     demo.values.offset = Math.PI / 2;
     demo.values.demo = document.getElementById('demo');
     demo.values.ctx = demo.values.demo.getContext('2d');
@@ -55,81 +75,57 @@
 
     demo.functions.seconds_ring = function (tSec) {
       var ctx = demo.values.ctx;
-      var wx = demo.values.window_height;
-      var wy = demo.values.window_width;
-      var cx = demo.values.clock_height;
-      var cy = demo.values.clock_width;
-      var mx = cx / 2;
-      var my = cy / 2;
       var pSec = tSec / 60;
-      var sec_circ = mx * 0.8;
-      var line_width = mx * 0.19;
+      var sec_circ = demo.values.second_circ;
+      var line_width = demo.values.line_width;
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pSec - offset;
       var end = Math.PI * 2 - offset;
       ctx.beginPath();
-      ctx.arc(mx, my, sec_circ, start, end, true);
-      ctx.strokeStyle = "rgb(0,50,50)";
+      ctx.arc(demo.values.mx, demo.values.my, sec_circ, start, end, true);
+      ctx.strokeStyle = demo.values.second_stroke;
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
     demo.functions.minutes_ring = function (tMin) {
       var ctx = demo.values.ctx;
-      var wx = demo.values.window_height;
-      var wy = demo.values.window_width;
-      var cx = demo.values.clock_height;
-      var cy = demo.values.clock_width;
-      var mx = cx / 2;
-      var my = cy / 2;
       var pMin = tMin / 60;
-      var min_circ = mx * 0.6;
-      var line_width = mx * 0.19;
+      var min_circ = demo.values.minute_circ;
+      var line_width = demo.values.line_width;
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pMin - offset;
       var end = Math.PI * 2 - offset;
       ctx.beginPath();
-      ctx.arc(mx, my, min_circ, start, end, true);
-      ctx.strokeStyle = "rgb(0,100,100)";
+      ctx.arc(demo.values.mx, demo.values.my, min_circ, start, end, true);
+      ctx.strokeStyle = demo.values.minute_stroke;
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
     demo.functions.hours_ring = function (tHour) {
       var ctx = demo.values.ctx;
-      var wx = demo.values.window_height;
-      var wy = demo.values.window_width;
-      var cx = demo.values.clock_height;
-      var cy = demo.values.clock_width;
-      var mx = cx / 2;
-      var my = cy / 2;
       var pHour = tHour / 24;
-      var hour_circ = mx * 0.4;
-      var line_width = mx * 0.19;
+      var hour_circ = demo.values.hour_circ;
+      var line_width = demo.values.line_width;
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pHour - offset;
       var end = Math.PI * 2 - offset;
       ctx.beginPath();
-      ctx.arc(mx, my, hour_circ, start, end, true);
-      ctx.strokeStyle = "rgb(0,150,150)";
+      ctx.arc(demo.values.mx, demo.values.my, hour_circ, start, end, true);
+      ctx.strokeStyle = demo.values.hour_stroke;
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
     demo.functions.days_ring = function (tDay) {
       var ctx = demo.values.ctx;
-      var wx = demo.values.window_height;
-      var wy = demo.values.window_width;
-      var cx = demo.values.clock_height;
-      var cy = demo.values.clock_width;
-      var mx = cx / 2;
-      var my = cy / 2;
       var pDay = tDay / 7;
-      var day_circ = mx * 0.2;
-      var line_width = mx * 0.19;
+      var day_circ = demo.values.day_circ;
+      var line_width = demo.values.line_width;
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pDay - offset;
       var end = Math.PI * 2 - offset;
       ctx.beginPath();
-      ctx.arc(mx, my, day_circ, start, end, true);
-      ctx.strokeStyle = "rgb(0,200,200)";
+      ctx.arc(demo.values.mx, demo.values.my, day_circ, start, end, true);
+      ctx.strokeStyle = demo.values.day_stroke;
       ctx.lineWidth = line_width;
       ctx.stroke();
     }
