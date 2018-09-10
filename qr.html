@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+QR Code Clock.
+-->
+
+<head>
+  <style>
+    body {
+      background-color: white;
+      text-align: center;
+    }
+
+    /* https://stackoverflow.com/questions/29211998/make-div-max-height-equal-to-window-height-100px */
+    #qrcode {
+      height: calc(100vh);
+    }
+
+    canvas {
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="qrcode"></div>
+  <script src="./lib/qrcode.js"></script>
+  <script>
+    var demo = {};
+    demo.values = {};
+    demo.functions = {}
+    var qrcode = new QRCode(document.getElementById("qrcode"), "Time");
+    demo.functions.time = function () {
+      let today = new Date;
+      let iso = today.toISOString();
+      console.log(iso);
+      qrcode.clear();
+      qrcode.makeCode(iso);
+    }
+
+    demo.functions.time();
+    setInterval(function () {
+      demo.functions.time();
+    }, 1000);
+  </script>
+</body>
+
+</html>
