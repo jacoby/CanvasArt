@@ -2,24 +2,29 @@
 <html>
 
 <!--
-QR Code Clock.
+QR Code Clock. 
+
+QR library from https://davidshimjs.github.io/qrcodejs/
 -->
 
 <head>
   <style>
+    /* https://stackoverflow.com/questions/29211998/make-div-max-height-equal-to-window-height-100px */
+
     body {
       background-color: white;
-      text-align: center;
+      margin: 2vh ;
+      padding: 0 ;
+      text-align: center !important;
+    }
+    img {
+      height: calc(90vh);
+      display: inline-block !important;
+    }
+    div {
+      text-align: center !important;
     }
 
-    /* https://stackoverflow.com/questions/29211998/make-div-max-height-equal-to-window-height-100px */
-    #qrcode {
-      height: calc(100vh);
-    }
-
-    canvas {
-      margin: auto;
-    }
   </style>
 </head>
 
@@ -43,7 +48,7 @@ QR Code Clock.
     demo.functions.time();
     setInterval(function () {
       demo.functions.time();
-    }, 1000);
+    }, 10000);
   </script>
 </body>
 
