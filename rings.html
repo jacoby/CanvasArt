@@ -30,6 +30,8 @@
     demo.values.window_width = 500;
     demo.values.clock_height = 500;
     demo.values.clock_width = 500;
+    demo.values.tau = Math.PI * 2;
+
 
     demo.values.mx = demo.values.clock_height / 2;
     demo.values.my = demo.values.clock_width / 2;
@@ -45,6 +47,7 @@
     demo.values.hour_circ = demo.values.mx * 0.64;
     demo.values.day_circ = demo.values.mx * 0.86;
 
+    demo.values.stroke = "rgb(230,230,230)";
     demo.values.second_stroke = "rgb(50,200,50)";
     demo.values.minute_stroke = "rgb(50,150,50)";
     demo.values.hour_stroke = "rgb(50,100,50)";
@@ -81,6 +84,13 @@
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pSec - offset;
       var end = Math.PI * 2 - offset;
+
+      ctx.beginPath();
+      ctx.arc(demo.values.mx, demo.values.my, sec_circ, 0, demo.values.tau, true);
+      ctx.strokeStyle = demo.values.stroke;
+      ctx.lineWidth = line_width;
+      ctx.stroke();
+
       ctx.beginPath();
       ctx.arc(demo.values.mx, demo.values.my, sec_circ, start, end, true);
       ctx.strokeStyle = demo.values.second_stroke;
@@ -95,6 +105,13 @@
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pMin - offset;
       var end = Math.PI * 2 - offset;
+
+      ctx.beginPath();
+      ctx.arc(demo.values.mx, demo.values.my, min_circ, 0, demo.values.tau, true);
+      ctx.strokeStyle = demo.values.stroke;
+      ctx.lineWidth = line_width;
+      ctx.stroke();
+
       ctx.beginPath();
       ctx.arc(demo.values.mx, demo.values.my, min_circ, start, end, true);
       ctx.strokeStyle = demo.values.minute_stroke;
@@ -109,6 +126,13 @@
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pHour - offset;
       var end = Math.PI * 2 - offset;
+
+      ctx.beginPath();
+      ctx.arc(demo.values.mx, demo.values.my, hour_circ, 0, demo.values.tau, true);
+      ctx.strokeStyle = demo.values.stroke;
+      ctx.lineWidth = line_width;
+      ctx.stroke();
+
       ctx.beginPath();
       ctx.arc(demo.values.mx, demo.values.my, hour_circ, start, end, true);
       ctx.strokeStyle = demo.values.hour_stroke;
@@ -123,6 +147,13 @@
       var offset = demo.values.offset;
       var start = Math.PI * 2 * pDay - offset;
       var end = Math.PI * 2 - offset;
+
+      ctx.beginPath();
+      ctx.arc(demo.values.mx, demo.values.my, day_circ, 0, demo.values.tau, true);
+      ctx.strokeStyle = demo.values.stroke;
+      ctx.lineWidth = line_width;
+      ctx.stroke();
+
       ctx.beginPath();
       ctx.arc(demo.values.mx, demo.values.my, day_circ, start, end, true);
       ctx.strokeStyle = demo.values.day_stroke;
@@ -144,13 +175,16 @@
       ctx.fillStyle = "rgb(255,255,255)";
       ctx.fill();
 
-    } /* the part that keeps it going */
+    }
+
+    /* the part that keeps it going */
     setInterval(function () {
       demo.functions.rings();
     }, demo.values.interval);
+
+    /* functions independently, making the canvas square and big */
     make_square();
     window.onresize = make_square;
-
     function make_square() {
       let height = window.innerHeight;
       let width = window.innerWidth;
