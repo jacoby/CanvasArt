@@ -26,7 +26,7 @@ Imagine looking out of the front of the Millenium Falcon
   <script>
     var demo = {};
     demo.values = {};
-    demo.values.interval = 1000 / 60;
+    demo.values.interval = 1000 / 120;
     demo.values.window_height = 1000;
     demo.values.window_width = 1000;
     demo.values.clock_height = 1000;
@@ -50,7 +50,7 @@ Imagine looking out of the front of the Millenium Falcon
       ctx.strokeStyle = "rgb(0,0,0)";
       ctx.stroke();
       //ctx.fillStyle = "rgb(0,0,0)";
-      ctx.fillStyle = "rgba(0,0,0,0.2)";
+      ctx.fillStyle = "rgba(0,0,0,0.1)";
       ctx.fill();
     }
 
@@ -72,6 +72,7 @@ Imagine looking out of the front of the Millenium Falcon
       star.x += x;
       star.y -= y;
       star.radius += star.growth;
+      star.growth += star.growth / 100;
       star.speed += star.speed / 20;
     }
 
@@ -104,19 +105,20 @@ Imagine looking out of the front of the Millenium Falcon
     var stars = [];
 
     setInterval(function () {
+      console.log(stars.length);
       let canvas = document.getElementById("demo");
       demo.functions.whiteout();
-      let add_star = Math.floor(Math.random() * 3);
-      if (stars.length < max && add_star === 0) {
-        console.log('adding_star');
+      let add_star = Math.floor(Math.random() * 2);
+      // if (stars.length < max && add_star === 0) {
+        if (stars.length < max) {
+        // console.log('adding_star');
         let star = {};
         star.direction = Math.random() * 360;
-        star.growth = Math.random() * 0.2;
+        star.growth = Math.random() * 0.1;
         star.radius = 0.2;
         star.speed = (Math.random() * 2);
         star.x = canvas.width / 2;
         star.y = canvas.height / 2;
-        console.log([star.direction, star.speed]);
         stars.push(star);
       }
 
@@ -124,13 +126,12 @@ Imagine looking out of the front of the Millenium Falcon
         let star = stars[s];
         demo.functions.move(star);
         if (demo.functions.test(star)) {
-          console.log(["remove", s].join(' '));
+          // console.log(["remove", s].join(' '));
           stars.splice(s, 1);
         }
         demo.functions.draw(star);
       }
     }, demo.values.interval);
-
 
     fill_window();
     window.onresize = fill_window;
