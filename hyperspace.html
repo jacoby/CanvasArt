@@ -26,7 +26,7 @@ Imagine looking out of the front of the Millenium Falcon
   <script>
     var demo = {};
     demo.values = {};
-    demo.values.interval = 1000 / 120;
+    demo.values.interval = 1000 / 300;
     demo.values.window_height = 1000;
     demo.values.window_width = 1000;
     demo.values.clock_height = 1000;
@@ -49,8 +49,8 @@ Imagine looking out of the front of the Millenium Falcon
       ctx.lineTo(0, 0);
       ctx.strokeStyle = "rgb(0,0,0)";
       ctx.stroke();
-      //ctx.fillStyle = "rgb(0,0,0)";
-      ctx.fillStyle = "rgba(0,0,0,0.1)";
+      ctx.fillStyle = "rgb(0,0,0)";
+      // ctx.fillStyle = "rgba(0,0,0,0.1)";
       ctx.fill();
     }
 
@@ -101,7 +101,7 @@ Imagine looking out of the front of the Millenium Falcon
       ctx.fill();
     }
 
-    var max = 5000;
+    var max = 400;
     var stars = [];
 
     setInterval(function () {
@@ -110,11 +110,12 @@ Imagine looking out of the front of the Millenium Falcon
       demo.functions.whiteout();
       let add_star = Math.floor(Math.random() * 2);
       // if (stars.length < max && add_star === 0) {
-        if (stars.length < max) {
+        while (stars.length < max) {
         // console.log('adding_star');
         let star = {};
         star.direction = Math.random() * 360;
-        star.growth = Math.random() * 0.1;
+        // star.growth = Math.random() * 0.1;
+        star.growth = 0.01;
         star.radius = 0.2;
         star.speed = (Math.random() * 2);
         star.x = canvas.width / 2;
