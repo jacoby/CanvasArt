@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+
+Imagine looking out of the front of the Millenium Falcon
+
+-->
+
+<head>
+  <style>
+    body {
+      background-color: white;
+      text-align: center;
+    }
+
+    canvas {
+      background-color: black;
+      border: 1px solid black;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body> <canvas id="demo"></canvas>
+  <script>
+    var demo = {};
+    demo.values = {};
+    demo.values.interval = 1000 / 300;
+    demo.values.window_height = 1000;
+    demo.values.window_width = 1000;
+    demo.values.clock_height = 1000;
+    demo.values.clock_width = 1000;
+    demo.values.demo = document.getElementById('demo');
+    demo.values.ctx = demo.values.demo.getContext('2d');
+
+    demo.functions = {}
+
+    /* whiteout() clears the canvas so more painting can go on */
+    /* because space, blackout */
+    demo.functions.whiteout = function () {
+      var ctx = demo.values.ctx;
+      let canvas = document.getElementById("demo");
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, canvas.height);
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.lineTo(canvas.width, 0);
+      ctx.lineTo(0, 0);
+      ctx.strokeStyle = "rgb(0,0,0)";
+      ctx.stroke();
+      ctx.fillStyle = "rgb(0,0,0)";
+      // ctx.fillStyle = "rgba(0,0,0,0.1)";
+      ctx.fill();
+    }
+
+    demo.functions.moveX = function (direction, distance) {
+      return (distance * Math.sin(deg2rad(direction)))
+    }
+
+    demo.functions.moveY = function (direction, distance) {
+      return (distance * Math.cos(deg2rad(direction)))
+    }
+
+    function deg2rad(degrees) {
+      return degrees * Math.PI / 180;
+    };
+
+    demo.functions.move = function (star) {
+      let x = demo.functions.moveX(star.direction, star.speed);
+      let y = demo.functions.moveY(star.direction, star.speed);
+      star.x += x;
+      star.y -= y;
+      star.radius += star.growth;
+      star.growth += star.growth / 100;
+      star.speed += star.speed / 20;
+    }
+
+    demo.functions.test = function (star) {
+      let canvas = document.getElementById("demo");
+      if (star.x + star.radius < 0) {
+        return 1
+      }
+      if (star.y + star.radius < 0) {
+        return 1
+      }
+      if (star.x - star.radius > canvas.width) {
+        return 1
+      }
+      if (star.y - star.radius > canvas.height) {
+        return 1
+      }
+    }
+
+    demo.functions.draw = function (star) {
+      let canvas = document.getElementById("demo");
+      var ctx = demo.values.ctx;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2, true);
+      ctx.fillStyle = 'rgb(255,255,255)';
+      ctx.fill();
+    }
+
+    var max = 400;
+    var stars = [];
+    var sarr = [0,60,120,180,240,300]
+
+    setInterval(function () {
+      console.log(stars.length);
+      let canvas = document.getElementById("demo");
+      demo.functions.whiteout();
+
+      for ( let i in sarr ) {
+      stars.push({
+        direction: sarr[i],
+        growth: 0.01,
+        radius: 0.2,
+        speed:0.3,
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+      });
+      sarr[i] = sarr[i] + 1 % 360 ;
+      }
+
+
+      let add_star = Math.floor(Math.random() * 2);
+      // if (stars.length < max && add_star === 0) {
+      while (stars.length < max) {
+        // console.log('adding_star');
+        let star = {};
+        star.direction = Math.random() * 360;
+        // star.growth = Math.random() * 0.1;
+        star.growth = 0.01;
+        star.radius = 0.2;
+        star.speed = (Math.random() * 2);
+        star.x = canvas.width / 2;
+        star.y = canvas.height / 2;
+        stars.push(star);
+      }
+
+      for (let s in stars) {
+        let star = stars[s];
+        demo.functions.move(star);
+        if (demo.functions.test(star)) {
+          // console.log(["remove", s].join(' '));
+          stars.splice(s, 1);
+        }
+        demo.functions.draw(star);
+      }
+    }, demo.values.interval);
+
+    fill_window();
+    window.onresize = fill_window;
+    /* Ensures that the canvas is near full-size, but not over */
+    function fill_window() {
+      let demo = document.getElementById("demo");
+      demo.height = window.innerHeight * 0.95;
+      demo.width = window.innerWidth * 0.95;
+    }
+  </script>
+</body>
+
+</html>

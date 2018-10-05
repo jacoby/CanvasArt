@@ -12,7 +12,7 @@ apparently happening.
 <head>
   <style>
     body {
-      background-color: white;
+      background-color: grey;
       text-align: center;
     }
 
@@ -22,7 +22,8 @@ apparently happening.
   </style>
 </head>
 
-<body> <canvas id="demo" width="1000" height="1000"></canvas>
+<body>
+  <canvas id="demo" width="1000" height="1000"></canvas>
   <script>
     var demo = {};
     demo.values = {};
@@ -37,25 +38,27 @@ apparently happening.
     demo.functions = {}
 
     /* whiteout() clears the canvas so more painting can go on */
+    /* OF COURSE there's a way to just clear it out.*/
     demo.functions.whiteout = function () {
       var ctx = demo.values.ctx;
       var winx = demo.values.window_height;
       var winy = demo.values.window_width;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, winy);
-      ctx.lineTo(winx, winy);
-      ctx.lineTo(winx, 0);
-      ctx.lineTo(0, 0);
-      ctx.strokeStyle = "rgb(255,255,255)";
-      ctx.stroke();
-      ctx.fillStyle = "rgb(255,255,255)";
-      ctx.fill();
+      // ctx.beginPath();
+      // ctx.moveTo(0, 0);
+      // ctx.lineTo(0, winy);
+      // ctx.lineTo(winx, winy);
+      // ctx.lineTo(winx, 0);
+      // ctx.lineTo(0, 0);
+      // ctx.strokeStyle = "rgb(255,255,255)";
+      // ctx.stroke();
+      // ctx.fillStyle = "rgb(255,255,255)";
+      // ctx.fill();
+      ctx.clearRect(0, 0, winx, winy);
     }
 
     /* looper draws the arc, setting the line width and
       the like based on the window size 
-     */ 
+     */
     demo.functions.looper = function (i, j) {
       var ctx = demo.values.ctx;
       var cx = demo.values.clock_height;
@@ -83,9 +86,9 @@ apparently happening.
     var max = Math.PI * 4;
 
     setInterval(function () {
-      if ( i > max && j > max ) {
-        i = i % max ;
-        j = j % max ;
+      if (i > max && j > max) {
+        i = i % max;
+        j = j % max;
       }
 
       if (order === 1) {
@@ -111,6 +114,7 @@ apparently happening.
     // the window
     make_square();
     window.onresize = make_square;
+
     function make_square() {
       let height = window.innerHeight;
       let width = window.innerWidth;
