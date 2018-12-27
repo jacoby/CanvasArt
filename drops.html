@@ -27,7 +27,7 @@ apparently happening.
   <script>
     var demo = {};
     demo.values = {};
-    demo.values.interval = 1000 / 24 ;
+    demo.values.interval = 1000 / 24;
     demo.values.window_height = 1000;
     demo.values.window_width = 1000;
     demo.values.clock_height = 1000;
@@ -41,30 +41,17 @@ apparently happening.
     demo.functions.whiteout = function () {
       var ctx = demo.values.ctx;
       let canvas = document.getElementById("demo");
-      // canvas.height = window.innerHeight * 0.95;
-      // canvas.width = window.innerWidth * 0.95;
-
-
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, canvas.height);
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.lineTo(canvas.width, 0);
-      ctx.lineTo(0, 0);
-      ctx.strokeStyle = "rgb(255,255,255)";
-      ctx.stroke();
-      ctx.fillStyle = "rgb(255,255,255)";
-      ctx.fill();
+      var winx = canvas.width;
+      var winy = canvas.height;
+      ctx.clearRect(0, 0, winx, winy);
     }
 
-    demo.functions.drip = function ( d ) {
-      console.log(d);
+    demo.functions.drip = function (d) {
       var ctx = demo.values.ctx;
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2, true);
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 0.4;
       ctx.strokeStyle = "rgb(0,0,0)";
-      // ctx.strokeStyle = d.stroke;
       ctx.stroke();
       ctx.fillStyle = d.fill;
       ctx.fill();
@@ -74,37 +61,45 @@ apparently happening.
       let canvas = document.getElementById("demo");
       let x = Math.random() * canvas.width;
       let y = Math.random() * canvas.height;
-      let z = 10 + Math.random() * 90;
-      let r = 15 + Math.floor( Math.random() * 220 );
-      let g = 15 + Math.floor( Math.random() * 220 );
-      let b = 15 + Math.floor( Math.random() * 220 );
-      g = r ;
-      b = r;
-      let a = 0.79;
-      let rgb = [r,g,b].join(",");
-      let rgba = [r,g,b,a].join(",");
-      let color = ["rgb(",rgb,")"].join("");
-      // let color = ["rgba(",rgba,")"].join("");
-      return({ x:x,y:y,r:z,fill:color });
+      let z = Math.floor(Math.random() * Math.min(canvas.width / 8, canvas.height / 8));
+      let r = 105 + Math.floor(Math.random() * 150);
+      let g = 055 + Math.floor(Math.random() * 150);
+      let b = 055 + Math.floor(Math.random() * 150);
+      r = 150;
+      g = 90;
+      b = 250;
+      let a = (0.2 + Math.random() * 0.3).toFixed(1);
+      let rgba = [r, g, b, a].join(",");
+      let color = ["rgba(", rgba, ")"].join("");
+      return ({
+        x: x,
+        y: y,
+        r: z,
+        fill: color
+      });
     }
 
-    var max = 100;
-    var drops = [] ;
+    var max = 55;
+    var drops = [];
 
-    setInterval(function () {
+    function loop() {
       demo.functions.whiteout();
       let drip = demo.functions.make_drip();
       drops.push(drip);
-      while ( drops.length > max ) { drops.shift() }
-      for (let i in drops ) {
+      while (drops.length > max) {
+        drops.shift()
+      }
+      for (let i in drops) {
         let drop = drops[i];
         demo.functions.drip(drop);
       }
-    }, demo.values.interval);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
 
-    
     fill_window();
     window.onresize = fill_window;
+
     function fill_window() {
       let demo = document.getElementById("demo");
       demo.height = window.innerHeight * 0.95;

@@ -91,38 +91,65 @@ Imagine looking out of the front of the Millenium Falcon
       ctx.fill();
     }
 
-    var max = 400;
+    var max = 200;
     var stars = [];
 
-    setInterval(function () {
-      console.log(stars.length);
+    function loop() {
       let canvas = document.getElementById("demo");
       demo.functions.whiteout();
-      let add_star = Math.floor(Math.random() * 2);
-      // if (stars.length < max && add_star === 0) {
-        while (stars.length < max) {
-        // console.log('adding_star');
+      while (stars.length < max) {
         let star = {};
         star.direction = Math.random() * 360;
-        // star.growth = Math.random() * 0.1;
         star.growth = 0.01;
         star.radius = 0.2;
-        star.speed = (Math.random() * 2);
+        star.speed = (Math.random() * 0.7);
         star.x = canvas.width / 2;
         star.y = canvas.height / 2;
         stars.push(star);
       }
-
       for (let s in stars) {
         let star = stars[s];
         demo.functions.move(star);
         if (demo.functions.test(star)) {
-          // console.log(["remove", s].join(' '));
           stars.splice(s, 1);
         }
         demo.functions.draw(star);
       }
-    }, demo.values.interval);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+
+    // setInterval(function () {
+    //   console.log(stars.length);
+    //   let canvas = document.getElementById("demo");
+    //   demo.functions.whiteout();
+    //   let add_star = Math.floor(Math.random() * 2);
+    //     while (stars.length < max) {
+    //     let star = {};
+    //     star.direction = Math.random() * 360;
+    //     star.growth = 0.01;
+    //     star.radius = 0.2;
+    //     star.speed = (Math.random() * 1);
+
+    //     star.growth = 0.03;
+    //     star.radius = 0.1;
+    //     star.speed  = 0.1;
+
+    //     star.x = canvas.width / 2;
+    //     star.y = canvas.height / 2;
+    //     stars.push(star);
+    //   }
+
+    //   for (let s in stars) {
+    //     let star = stars[s];
+    //     demo.functions.move(star);
+    //     if (demo.functions.test(star)) {
+    //       stars.splice(s, 1);
+    //     }
+    //     demo.functions.draw(star);
+    //   }
+    // }, demo.values.interval);
 
     fill_window();
     window.onresize = fill_window;
