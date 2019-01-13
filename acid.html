@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<!--
+
+The goal here is to make a throbber, like used in browsers
+to indicate that something is going on, even if nothing is 
+apparently happening.
+
+-->
+
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      background-color: white;
+      text-align: center;
+    }
+
+    canvas {
+      border: 1px solid gray;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="demo"></canvas>
+  <script>
+    var demo = {};
+    demo.values = {};
+    demo.values.interval = 1000 / 24;
+    demo.values.window_height = 1000;
+    demo.values.window_width = 1000;
+    demo.values.clock_height = 1000;
+    demo.values.clock_width = 1000;
+    demo.values.demo = document.getElementById("demo");
+    demo.values.ctx = demo.values.demo.getContext("2d");
+
+    demo.functions = {};
+
+    /* whiteout() clears the canvas so more painting can go on */
+    demo.functions.whiteout = function () {
+      var ctx = demo.values.ctx;
+      let canvas = document.getElementById("demo");
+      var winx = canvas.width;
+      var winy = canvas.height;
+      ctx.clearRect(0, 0, winx, winy);
+    };
+
+    demo.functions.drip = function (d) {
+      var ctx = demo.values.ctx;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2, true);
+      ctx.lineWidth = 0.2;
+      ctx.strokeStyle = 'black';
+      ctx.stroke();
+
+      ctx.fillStyle = d.fill;
+      ctx.fill();
+    };
+
+    let rr = 0;
+    let rg = 0;
+    let rb = 0;
+    let i = 0;
+    demo.functions.make_drip = function () {
+      let canvas = document.getElementById("demo");
+      let x = Math.random() * canvas.width;
+      let y = Math.random() * canvas.height;
+      let z = Math.floor(
+        Math.random() * Math.min(canvas.width / 8, canvas.height / 8)
+      );
+      x = -160;
+      y = -160;
+      i += 0.04;
+      let j = Math.sin(i);
+      z = (1.1 + j) * 30
+
+      rr += 0.1;
+      rg += 0.2;
+      rb += 0.4;
+
+      let r = 100 + Math.floor(70 * (1 + Math.sin(rr)));
+      let g = 100 + Math.floor(70 * (1 + Math.sin(rg)));
+      let b = 100 + Math.floor(70 * (1 + Math.sin(rb)));
+      let a = 0.5;
+      let rgba = [r, g, b, a].join(",");
+      let color = ["rgba(", rgba, ")"].join("");
+      // console.log(rgba);
+      return {
+        x: x,
+        y: y,
+        r: z,
+        fill: color
+      };
+    };
+
+    var max = 250;
+    var drops = [];
+
+    function loop() {
+      demo.functions.whiteout();
+      let drip = demo.functions.make_drip();
+      drops.push(drip);
+      while (drops.length > max) {
+        drops.shift();
+      }
+      for (let i in drops) {
+        let drop = drops[i];
+        drops[i].x += 7;
+        drops[i].y += 7;
+        drops[i].r *= 1.02;
+        demo.functions.drip(drops[i]);
+      }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    fill_window();
+    window.onresize = fill_window;
+
+    function fill_window() {
+      let demo = document.getElementById("demo");
+      demo.height = window.innerHeight * 0.95;
+      demo.width = window.innerWidth * 0.95;
+    }
+  </script>
+</body>
+
+</html>
