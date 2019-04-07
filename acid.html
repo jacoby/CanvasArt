@@ -2,18 +2,22 @@
 <html>
 <!--
 
-The goal here is to make a throbber, like used in browsers
-to indicate that something is going on, even if nothing is 
-apparently happening.
+ACID, because I'm wanting this to work a bit like the
+Joshua Light Show
 
 -->
 
 <head>
   <meta charset="UTF-8" />
   <style>
+    *{
+      margin:0;
+      padding:0;
+    }
     body {
       background-color: white;
       text-align: center;
+      overflow: hidden;
     }
 
     canvas {
@@ -51,9 +55,9 @@ apparently happening.
       var ctx = demo.values.ctx;
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2, true);
-      ctx.lineWidth = 0.2;
-      ctx.strokeStyle = 'black';
-      ctx.stroke();
+      // ctx.lineWidth = 0.2;
+      // ctx.strokeStyle = 'black';
+      // ctx.stroke();
 
       ctx.fillStyle = d.fill;
       ctx.fill();
@@ -85,7 +89,9 @@ apparently happening.
       let b = 100 + Math.floor(70 * (1 + Math.sin(rb)));
       let a = 0.5;
       let rgba = [r, g, b, a].join(",");
-      let color = ["rgba(", rgba, ")"].join("");
+      let rgb = [r, g, b].join(",");
+      // let color = ["rgba(", rgba, ")"].join("");
+      let color = ["rgb(", rgb, ")"].join("");
       // console.log(rgba);
       return {
         x: x,
@@ -95,7 +101,7 @@ apparently happening.
       };
     };
 
-    var max = 250;
+    var max = 170;
     var drops = [];
 
     function loop() {
@@ -107,8 +113,8 @@ apparently happening.
       }
       for (let i in drops) {
         let drop = drops[i];
-        drops[i].x += 7;
-        drops[i].y += 7;
+        drops[i].x += 4;
+        drops[i].y += 5;
         drops[i].r *= 1.02;
         demo.functions.drip(drops[i]);
       }
@@ -121,8 +127,8 @@ apparently happening.
 
     function fill_window() {
       let demo = document.getElementById("demo");
-      demo.height = window.innerHeight * 0.95;
-      demo.width = window.innerWidth * 0.95;
+      demo.height = window.innerHeight * 1.05;
+      demo.width = window.innerWidth * 1.05;
     }
   </script>
 </body>
